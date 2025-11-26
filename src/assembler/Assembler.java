@@ -3,27 +3,28 @@ package assembler;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import components.Register;
-
 import architecture.Architecture;
 
 public class Assembler {
-
+	
 	private ArrayList<String> lines;
 	private ArrayList<String> objProgram;
 	private ArrayList<String> execProgram;
 	private Architecture arch;
-	private ArrayList<String>commands;
+	private ArrayList<String>commands;	
 	private ArrayList<String>labels;
 	private ArrayList<Integer> labelsAdresses;
 	private ArrayList<String>variables;
-
-
+	
+	
 	public Assembler() {
 		lines = new ArrayList<>();
 		labels = new ArrayList<>();
@@ -32,45 +33,45 @@ public class Assembler {
 		objProgram = new ArrayList<>();
 		execProgram = new ArrayList<>();
 		arch = new Architecture();
-		commands = arch.getCommandsList();
+		commands = arch.getCommandsList();	
 	}
-
+	
 	//getters
-
+	
 	public ArrayList<String> getObjProgram() {
 		return objProgram;
 	}
-
+	
 	/**
 	 * These methods getters and set below are used only for TDD purposes
 	 * @param lines
 	 */
-
+	
 	protected ArrayList<String> getLabels() {
 		return labels;
 	}
-
+	
 	protected ArrayList<Integer> getLabelsAddresses() {
 		return labelsAdresses;
 	}
-
+	
 	protected ArrayList<String> getVariables() {
 		return variables;
 	}
-
+	
 	protected ArrayList<String> getExecProgram() {
 		return execProgram;
 	}
-
+	
 	protected void setLines(ArrayList<String> lines) {
 		this.lines = lines;
-	}
+	}	
 
 	protected void setExecProgram(ArrayList<String> lines) {
 		this.execProgram = lines;
-	}
-
-
+	}	
+	
+	
 	/*
 	 * An assembly program is always in the following template
 	 * <variables>
@@ -81,29 +82,29 @@ public class Assembler {
 	 *      variables names never uses any command name
 	 * 		names ended with ":" identifies labels i.e. address in the memory
 	 * 		Commands are only that ones known in the architecture. No comments allowed
-	 *
+	 * 	
 	 * 		The assembly file must have the extention .dsf
-	 * 		The executable file must have the extention .dxf
+	 * 		The executable file must have the extention .dxf 	
 	 */
-
+	
 
 
 	/**
-	 * This method reads an entire file in assembly
+	 * This method reads an entire file in assembly 
 	 * @param filename
-	 * @throws IOException
+	 * @throws IOException 
 	 */
 	public void read(String filename) throws IOException {
-		   BufferedReader br = new BufferedReader(new
+		   BufferedReader br = new BufferedReader(new		 
 		   FileReader(filename+".dsf"));
 		   String linha;
 		   while ((linha = br.readLine()) != null) {
 			     lines.add(linha);
 			}
 			br.close();
-
+			
 	}
-
+	
 
 	/**
 	 * This method scans the strings in lines
@@ -126,7 +127,7 @@ public class Assembler {
 					variables.add(tokens[0]);
 			}
 		}
-
+		
 	}
 
 
@@ -147,7 +148,7 @@ public class Assembler {
 		}
 		if (commandNumber == 1) { //must to proccess an sub command
 			parameter = tokens[1];
-			parameter = "&"+parameter;//this is a flag to indicate that is a position in memory
+			parameter = "&"+parameter;//this is a flag to indicate that is a position in memory		
 		}
 		if (commandNumber == 2) { //must to proccess an jmp command
 			parameter = tokens[1];
@@ -173,7 +174,7 @@ public class Assembler {
 			parameter = tokens[1];
 		}
 		if (commandNumber == 8) { //must to proccess an inc command
-
+			
 		}
 		if (commandNumber == 9) { //must to proccess an moveRegReg command
 			parameter = tokens[1];
@@ -187,7 +188,7 @@ public class Assembler {
 			objProgram.add(parameter2);
 		}
 	}
-
+	
 
 	/**
 	 * This method uses the tokens to search a command
@@ -224,15 +225,15 @@ public class Assembler {
 
 	/**
 	 * This method creates the executable program from the object program
-	 * Step 1: check if all variables and labels mentioned in the object
+	 * Step 1: check if all variables and labels mentioned in the object 
 	 * program are declared in the source program
 	 * Step 2: allocate memory addresses (space), from the end to the begin (stack)
 	 * to store variables
 	 * Step 3: identify memory positions to the labels
 	 * Step 4: make the executable by replacing the labels and the variables by the
-	 * corresponding memory addresses
-	 * @param filename
-	 * @throws IOException
+	 * corresponding memory addresses 
+	 * @param filename 
+	 * @throws IOException 
 	 */
 	public void makeExecutable(String filename) throws IOException {
 		if (!checkLabels())
@@ -260,7 +261,7 @@ public class Assembler {
 			}
 			p++;
 		}
-
+		
 	}
 
 	/**
@@ -279,7 +280,7 @@ public class Assembler {
 	/**
 	 * This method saves the execFile collection into the output file
 	 * @param filename
-	 * @throws IOException
+	 * @throws IOException 
 	 */
 	private void saveExecFile(String filename) throws IOException {
 		File file = new File(filename+".dxf");
@@ -288,7 +289,7 @@ public class Assembler {
 			writer.write(l+"\n");
 		writer.write("-1"); //-1 is a flag indicating that the program is finished
 		writer.close();
-
+		
 	}
 
 	/**
@@ -310,7 +311,7 @@ public class Assembler {
 			}
 			i++;
 		}
-
+		
 	}
 
 	/**
@@ -355,7 +356,7 @@ public class Assembler {
 		}
 		return true;
 	}
-
+	
 	/**
 	 * This method searches for a register in the architecture register list
 	 * by the register name
@@ -384,5 +385,5 @@ public class Assembler {
 		System.out.println("Generating executable: "+filename+".dxf");
 		assembler.makeExecutable(filename);
 	}
-
+		
 }
