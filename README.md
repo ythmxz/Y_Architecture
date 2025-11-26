@@ -4,12 +4,12 @@
 
 Windows:
 ```
-javac -cp "lib/junit-4.13.2.jar;src" -d bin src/architecture/\*.java src/assembler/\*.java src/components/\*.java
+javac -cp "lib/junit-4.13.2.jar;src" -d bin src/architecture/*.java src/assembler/*.java src/components/*.java
 ```
 
 Linux:
 ```
-javac -cp "lib/junit-4.13.2.jar:src" -d bin src/architecture/\*.java src/assembler/\*.java src/components/\*.java
+javac -cp "lib/junit-4.13.2.jar:src" -d bin src/architecture/*.java src/assembler/*.java src/components/*.java
 ```
 
 O argumento "-d bin" envia todos os arquivos .class para o diretório bin. Só para organizar mesmo.
